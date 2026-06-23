@@ -1,0 +1,51 @@
+version: "3.9"
+
+services:
+  account-service:
+    build:
+      context: .
+      dockerfile: account_service/Dockerfile
+    container_name: account-service
+    ports:
+      - "8001:8001"
+    volumes:
+      - account_data:/data
+    environment:
+      PORT: "8001"
+      DB_PATH: /data/account_service.db
+    healthcheck:
+      test: ["CMD", "python3", "-c",
+             "import urllib.request; urllib.request.urlopen('http://localhost:8001/health', timeout=2)"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    networks:
+      - ledger-net
+
+  gateway:
+    build:
+      context: .
+      dockerfile: gateway/Dockerfile
+    container_name: event-gateway
+    ports:
+      - "8000:8000"
+    volumes:
+      - gateway_data:/data
+    environment:
+      PORT: "8000"
+      DB_PATH: /data/gateway.db
+      ACCOUNT_SERVICE_URL: http://account-service:8001
+      ACCOUNT_TIMEOUT: "5"
+    depends_on:
+      account-service:
+        condition: service_healthy
+    networks:
+      - ledger-net
+
+volumes:
+  gateway_data:
+  account_data:
+
+networks:
+  ledger-net:
+    driver: bridge
