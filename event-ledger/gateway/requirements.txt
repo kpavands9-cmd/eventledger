@@ -1,0 +1,4 @@
+# Event Gateway — runtime dependencies
+# Zero external deps: the service uses Python stdlib only (http.server, sqlite3, urllib).
+# These are listed for reference and for Docker layer caching; no pip install needed.
+# To run: python3 gateway/main.py

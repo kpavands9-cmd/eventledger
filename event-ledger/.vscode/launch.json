@@ -1,0 +1,41 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Account Service",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/account_service/main.py",
+      "console": "integratedTerminal",
+      "env": {
+        "PORT": "8001",
+        "DB_PATH": "account_service.db"
+      }
+    },
+    {
+      "name": "Gateway",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/gateway/main.py",
+      "console": "integratedTerminal",
+      "env": {
+        "PORT": "8000",
+        "DB_PATH": "gateway.db",
+        "ACCOUNT_SERVICE_URL": "http://localhost:8001"
+      }
+    },
+    {
+      "name": "Run All Tests",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/tests/test_event_ledger.py",
+      "console": "integratedTerminal"
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Both Services",
+      "configurations": ["Account Service", "Gateway"]
+    }
+  ]
+}

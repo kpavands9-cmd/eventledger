@@ -1,0 +1,4 @@
+# Account Service — runtime dependencies
+# Zero external deps: the service uses Python stdlib only (http.server, sqlite3).
+# These are listed for reference and for Docker layer caching; no pip install needed.
+# To run: python3 account_service/main.py
